@@ -159,7 +159,10 @@ function stoked{
 
 #return host and ID
 function hostID{
+    Write-Output "Getting hosts and their ID's"
     Get-VMHost | select id, name
+    Write-Output " "
+    Write-Output "Completed getting hosts and their ID's"
 }
 
 #return datastores that the vc can see
