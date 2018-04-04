@@ -179,6 +179,7 @@ function getDatastores{
 
     Write-Output "finished checking datastores"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\datastores.csv"
 }
 
 #returns the datastores and storage on each host
@@ -200,6 +201,7 @@ function getHostDatastores{
 
     Write-Output "finished checking datastores per host"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\hostDatastores.csv"
 }
 
 #returns the virtual distribtued switch and settings
@@ -215,6 +217,7 @@ function getVDS{
 
     Write-Output "finished checking virtual distributed switches and number of ports"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\vds.csv"
 }
 
 #returns the location the host is sending syslogs to
@@ -237,6 +240,7 @@ function getLogsLocation{
 
     Write-Output "finished checking syslog.global.loghost location"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\logAddr.csv"
 }
 
 #returns the domain the host is connected to if any
@@ -259,6 +263,7 @@ function getDomain{
 
     Write-Output "finished checking domain"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\domains.csv"
 }
 
 #returns the physical uplinks for each host
@@ -279,6 +284,7 @@ function getPhysUplinksHost{
 
     Write-Output "finished checking physical uplinks per host"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\physicalUplinksPerHost.csv"
 }
 
 #returns the HA, DRS and EVC status for each host
@@ -294,6 +300,7 @@ function getHAandDRSandEVC{
 
     Write-Output "finished checking HA DRS EVC"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\hadrsevc.csv"
 }
 
 #returns the ntp server for each host
@@ -314,11 +321,14 @@ Write-Output "===================="
 
     Write-Output "finished checking NTP"
     Write-Output "===================="
+    Write-Output "Writing output to $(pwd)\ntp.csv"
 }
 
 #returns the current path ie  PWD
 function getPath{
-    pwd
+    #pwd
+    $currentDirectory = pwd
+    Write-Output "$($currentDirectory)"
 }
 
 
