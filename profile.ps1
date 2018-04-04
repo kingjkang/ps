@@ -5,6 +5,7 @@ $creds = Get-Credential -Message "dont forget domain" -UserName "administrator@v
 
 #imports required modules
 function init{
+    Write-Output "Importing modules"
     $date1 = $(Get-Date)
     Import-Module VMware.VimAutomation.Core
     Import-Module VMware.VimAutomation.Vds
@@ -18,32 +19,58 @@ function init{
 
 #returns the connected vCenter Servers
 function servers{
-    $global:DefaultVIServers
+    if(!$global:DefaultVIServers){
+        Write-Output "You are not connected to any vCenter Servers"
+    } else {
+        #$global:DefaultVIServers
+        foreach($server in $global:DefaultVIServers){
+            Write-Output "You are connected to $($server.Name)"
+        }
+    }
+}
+
+#returns the connected vCenter Servers with details
+function serversDetailed{
+    if(!$global:DefaultVIServers){
+        Write-Output "You are not connected to any vCenter Servers"
+    } else {
+        #$global:DefaultVIServers
+        foreach($server in $global:DefaultVIServers){
+            Write-Output "You are connected to $($server.Name) as $($server.User) through port $($server.Port)"
+        }
+    }
 }
 
 #changes the prompt and colors of CLI
 function prompt{
     $console = $Host.UI.RawUI
-    $console.ForegroundColor = "white"
-    #$Host.PrivateData.ConsolePaneBackgroundColor = "blue"
-    #$host.PrivateData.ConsolePaneTextBackgroundColor = "red"
-    "justin$ "
+    $console.ForegroundColor = "magenta"
+    $Host.PrivateData.ConsolePaneBackgroundColor = "darkblue"
+    $host.PrivateData.ConsolePaneTextBackgroundColor = "darkblue"
+    $currPath = pwd
+    "$($currPath) justin$ "
 }
 
 #attaches VIB to host and scans inventory
 function attachVIB{
     param($vib2attach)
+    Write-Output "Attaching VIB $($vib2attach)"
     $baseline = Get-Baseline -Name $vib2attach
     $hosts = Get-VMHost
     Attach-Baseline -Entity $hosts -Baseline $baseline
+    Write-Output "Completed attaching VIB $($vib2attach)"
+    Write-Output "Re-scanning inventory for compliance"
     Scan-Inventory -Entity $hosts
+    Write-Output "Completed re-scanning inventory for compliance"
 }
 
 #patches the vibs that are specified
 function patchVUM{
     param($vc, $cluster, $vib2update)
+    Write-Output "Starting patch of $($vib2update) on cluster $($cluster)"
     $baseline = Get-Baseline -Name $vib2update
     Remediate-Inventory -Server $vc -Entity $cluster -Baseline -Confirm:$false
+    Write-Output "Completed patch of $($vib2update) on cluster $($cluster)"
     #if i wanna run async
     #$hosts = Get-VMHost
     #foreach($item in $hosts){
@@ -53,18 +80,29 @@ function patchVUM{
 
 #connect to vcenter
 function vbc{
-    Connect-VIServer vcsa-01a.corp.local -Credential $creds
+    Write-Output "Connecting to vcsa-01a.corp.local"
+    $vc = Connect-VIServer vcsa-01a.corp.local -Credential $creds
+    servers
 }
 
 #disconnect from vcenter
 function vbd{
+    servers
+    Write-Output "Disconnecting from vcsa-01a.corp.local"
     Disconnect-VIServer * -Confirm:$false
+    servers
 }
 
 #enable ssh on specified host
 function sshEnable{
     param($hostname)
-    Get-VMHostService -VMHost $hostname | Where-Object {$_.Label -eq "ssh"} | Start-VMHostService
+    Write-Output "Enabling SSH on $($hostname)"
+    $enabled = Get-VMHostService -VMHost $hostname | Where-Object {$_.Label -eq "ssh"} | Start-VMHostService
+    if($enabled.Running){
+        Write-Output "Enabled SSH on $($hostname)"
+    } else {
+        Write-Output "Failed to enable SSH on $($hostname)"
+    }
 }
 
 #boe prox magic get host cert script
@@ -100,14 +138,23 @@ function hellaCerts{
 
 #return cert for hosts connected to vc
 function stoked{
+    param($hostname)
+
     if(!$global:DefaultVIServers){
         vbc
     } 
     
-    $hosts = Get-VMHost
-    foreach($curr in $hosts){
-        hellaCerts $curr
+    Write-Output "Starting to obtaining host Ccrtificates"
+    if($hostname){
+        hellaCerts $hostname
+    } else {
+        $hosts = Get-VMHost
+        foreach($curr in $hosts){
+            hellaCerts $curr
+        }
     }
+    Write-Output " "
+    Write-Output "Completed obtaining host certificates"
 }
 
 #return host and ID
