@@ -5,12 +5,15 @@ $creds = Get-Credential -Message "dont forget domain" -UserName "administrator@v
 
 #imports required modules
 function init{
-    $(Get-Date)
+    $date1 = $(Get-Date)
     Import-Module VMware.VimAutomation.Core
     Import-Module VMware.VimAutomation.Vds
     Import-Module VMware.VimAutomation.Storage
     Import-Module C:\Users\Administrator\Downloads\powernsx-master\powernsx-master\module\PowerNSX.psm1
-    $(Get-Date)
+    $date2 = $(Get-Date)
+    $time = $date2 - $date1
+    #$time = $time | select seconds
+    Write-Output "Importing modules took $($time.seconds) seconds."
 }
 
 #returns the connected vCenter Servers
