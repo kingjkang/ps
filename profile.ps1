@@ -1,7 +1,7 @@
 ﻿#profile
 
 #stores credentials for session
-$creds = Get-Credential -Message "dont forget domain" -UserName "administrator@vsphere.local"
+$creds = Get-Credential -Message "dont forget domain password is classic" -UserName "administrator@vsphere.local"
 
 #imports required modules
 function init{
@@ -48,7 +48,9 @@ function prompt{
     $Host.PrivateData.ConsolePaneBackgroundColor = "darkblue"
     $host.PrivateData.ConsolePaneTextBackgroundColor = "darkblue"
     $currPath = pwd
-    "$($currPath) justin$ "
+    #"$($currPath) justin$ "
+    $vis = " $($global:DefaultVIServers.name) "
+    "$($currPath)$($vis)justin$ "
 }
 
 #attaches VIB to host and scans inventory
