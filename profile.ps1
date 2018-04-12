@@ -344,11 +344,11 @@ function testGnarly{
         #mgmtIP
         $defaultGateway = $currHost.ExtensionData.Config.Network.IpRouteConfig.DefaultGateway
         #$defaultGateway
-
-        Write-Output "$($currHost.name) $($mgmtIP.ip) $($mgmtIP.subnetmask) $($defaultGateway)"
+        $dvpg = Get-VirtualPortGroup -Distributed -Name "hello"
+        $dvpgvid = $dvpg.ExtensionData.Config.DefaultPortConfig.Vlan.VlanId
+        Write-Output "$($currHost.name) $($mgmtIP.name) $($mgmtIP.ip) $($mgmtIP.subnetmask) $($defaultGateway) $($dvpgvid)"
     }
 }
-
 
 
 
