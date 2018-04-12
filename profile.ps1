@@ -346,7 +346,7 @@ function testGnarly{
         #$defaultGateway
         $dvpg = Get-VirtualPortGroup -Distributed -Name "hello"
         $dvpgvid = $dvpg.ExtensionData.Config.DefaultPortConfig.Vlan.VlanId
-        $dnses = $currHost | Get-VMHostNetwork | select dnsaddress
+        $dnses = $currHost | Get-VMHostNetwork | select dnsaddress, searchdomain
         $dns = $dnses.dnsaddress
         $primaryDNS = $dns[0]
         $secondaryDNS = $dns[1]
@@ -358,9 +358,9 @@ function testGnarly{
 function testTemp{
     $hosts = Get-VMHost
     $host0 = $hosts[0]
-    $dnses = $host0 | Get-VMHostNetwork | select dnsaddress
+    $dnses = $host0 | Get-VMHostNetwork | select dnsaddress, searchdomain
     $err = $dnses.dnsaddress
-    $err[0]
+    $dnses
 }
 
 
