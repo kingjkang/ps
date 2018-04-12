@@ -346,11 +346,22 @@ function testGnarly{
         #$defaultGateway
         $dvpg = Get-VirtualPortGroup -Distributed -Name "hello"
         $dvpgvid = $dvpg.ExtensionData.Config.DefaultPortConfig.Vlan.VlanId
-        Write-Output "$($currHost.name) $($mgmtIP.name) $($mgmtIP.ip) $($mgmtIP.subnetmask) $($defaultGateway) $($dvpgvid)"
+        $dnses = $currHost | Get-VMHostNetwork | select dnsaddress
+        $dns = $dnses.dnsaddress
+        $primaryDNS = $dns[0]
+        $secondaryDNS = $dns[1]
+        Write-Output "hostname: $($currHost.name) `nadaptername: $($mgmtIP.name) `nipaddress: $($mgmtIP.ip) `nsubnetmask: $($mgmtIP.subnetmask) `ndefaultgateway: $($defaultGateway) `nvladid: $($dvpgvid) `nprimaryDNS: $($primaryDNS) `nsecondaryDNS: $($secondaryDNS) `n`n"
     }
 }
 
 
+function testTemp{
+    $hosts = Get-VMHost
+    $host0 = $hosts[0]
+    $dnses = $host0 | Get-VMHostNetwork | select dnsaddress
+    $err = $dnses.dnsaddress
+    $err[0]
+}
 
 
 
