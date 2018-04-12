@@ -333,6 +333,24 @@ function getPath{
     Write-Output "$($currentDirectory)"
 }
 
+function testGnarly{
+    $hosts = Get-VMHost
+    foreach($currHost in $hosts){
+        $cnet = $currHost | Get-VMHostNetworkAdapter | select name, ip, subnetmask
+        #currHost.name
+        #$cnet[4, 5, 6, 7]
+        $nets = $cnet | Where-Object {$_.IP -ne ""} 
+        $mgmtIP = $nets | Where-Object {$_.name -eq "vmk0"}
+        #mgmtIP
+        $defaultGateway = $currHost.ExtensionData.Config.Network.IpRouteConfig.DefaultGateway
+        #$defaultGateway
+
+        Write-Output "$($currHost.name) $($mgmtIP.ip) $($mgmtIP.subnetmask) $($defaultGateway)"
+    }
+}
+
+
+
 
 
 
