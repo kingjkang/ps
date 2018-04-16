@@ -1,5 +1,6 @@
 ﻿Class esxihost{
     #properties
+    [String] $cluster
     [String] $mgmtNetworkID
     [String] $vlanID
     [String] $ipv4Mode
@@ -26,11 +27,12 @@
     [String] $hostProfile
 
     #constructor
-    esxihost([string]$imgmtnetworkid, [string]$ivlanid, [string]$iipv4mode, [string]$iipv4addr, [string]$iipv4sub, [string]$iipv4defaultgateway, 
+    esxihost([string]$icluster, [string]$imgmtnetworkid, [string]$ivlanid, [string]$iipv4mode, [string]$iipv4addr, [string]$iipv4sub, [string]$iipv4defaultgateway, 
             [string]$iipv6mode, [string]$iipv6addr1, [string]$iipv6addr2, [string]$iipv6addr3, [string]$iipv6defaultgateway, 
             [string]$iprimarydns, [string]$isecondarydns, [string]$ihostname, [string]$icustomdnssuffix, [string]$iswapfileloc, [string]$idefaultvmcompat, 
             [string]$itimeconfig, [string]$intpstartuppol, [string]$intpservers, [string]$idomain, [string]$icreds, [string]$iusingproxy, [string]$ihostprofile){
         
+        $this.cluster = $icluster
         $this.mgmtNetworkID = $imgmtnetworkid
         $this.vlanID = $ivlanid
         $this.ipv4Mode = $iipv4mode
