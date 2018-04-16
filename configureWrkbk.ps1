@@ -62,9 +62,11 @@ function populateHost{
 
             #Write-Output "hostname: $($currHost.name) `nadaptername: $($mgmtIP.name) `nipaddress: $($mgmtIP.ip) `nsubnetmask: $($mgmtIP.subnetmask) `ndefaultgateway: $($defaultGateway) `nip6address1: $($primaryip6) `nip6address2: $($secondaryip6) `nvladid: $($dvpgvid) `nprimaryDNS: $($primaryDNS) `nsecondaryDNS: $($secondaryDNS) `n`n"
             $tempAdd = New-Object esxihost($currCluster, $mgmtip.name, $dvpgvid, "need to get", $mgmtIP.ip, $mgmtIP.subnetmask, $defaultGateway, "need to get", $primaryip6, $secondaryip6, $thirdip6, "need to get", $primaryDNS, $secondaryDNS, $currHost.name, "need to get", "need to get", "need to get", "need to get", "need to get", $ntpserver, $dom.Domain, "need to get", "need to get", $hostProfile.Name)
-            $tempAdd
+            #$tempAdd
+            $hostTable += $tempAdd
         }
 
     }
-
+    #$hostTable += $tempAdd
+    return $hostTable
 }
