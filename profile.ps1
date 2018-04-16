@@ -336,20 +336,23 @@ function getPath{
 function testGnarly{
     $hosts = Get-VMHost
     foreach($currHost in $hosts){
+
+        #this is to get adapter, ipaddress, subnetmask, defaultgateway, vlanid
         $cnet = $currHost | Get-VMHostNetworkAdapter | select name, ip, subnetmask
-        #currHost.name
-        #$cnet[4, 5, 6, 7]
         $nets = $cnet | Where-Object {$_.IP -ne ""} 
         $mgmtIP = $nets | Where-Object {$_.name -eq "vmk0"}
-        #mgmtIP
         $defaultGateway = $currHost.ExtensionData.Config.Network.IpRouteConfig.DefaultGateway
-        #$defaultGateway
         $dvpg = Get-VirtualPortGroup -Distributed -Name "hello"
         $dvpgvid = $dvpg.ExtensionData.Config.DefaultPortConfig.Vlan.VlanId
+
+        #this is to get primary and secondary dns servers and search domain
         $dnses = $currHost | Get-VMHostNetwork | select dnsaddress, searchdomain
         $dns = $dnses.dnsaddress
         $primaryDNS = $dns[0]
         $secondaryDNS = $dns[1]
+
+
+
         Write-Output "hostname: $($currHost.name) `nadaptername: $($mgmtIP.name) `nipaddress: $($mgmtIP.ip) `nsubnetmask: $($mgmtIP.subnetmask) `ndefaultgateway: $($defaultGateway) `nvladid: $($dvpgvid) `nprimaryDNS: $($primaryDNS) `nsecondaryDNS: $($secondaryDNS) `n`n"
     }
 }
