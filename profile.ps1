@@ -11,6 +11,7 @@ function init{
     Import-Module VMware.VimAutomation.Vds
     Import-Module VMware.VimAutomation.Storage
     Import-Module C:\Users\Administrator\Downloads\powernsx-master\powernsx-master\module\PowerNSX.psm1
+    Import-Module C:\Users\Administrator\Documents\ps\Transpose.ps1
     $date2 = $(Get-Date)
     $time = $date2 - $date1
     #$time = $time | select seconds
